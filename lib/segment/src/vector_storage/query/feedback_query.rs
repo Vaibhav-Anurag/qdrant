@@ -59,7 +59,7 @@ pub struct FeedbackQuery<T, TStrategy> {
     /// The original query vector.
     pub target: T,
 
-    /// Pairs of results with higher difference in their golden score.
+    /// Pairs of results with higher difference in their feedback score.
     pub feedback_pairs: Vec<FeedbackPair<T>>,
 
     /// Formula to use.
