@@ -846,6 +846,11 @@ impl SegmentHolder {
             "Must flush appendable segments first",
         );
 
+        // Re-sort segments for flush ordering
+        // We MUST flush appendable segments first, even if the segment is proxified
+        // Inverts appendable state in sorting to put appendable segments first
+        segment_reads.sort_by_cached_key(|segment| !segment.is_inner_appendable());
+
         // Start with the max_persisted_vesrion at the set overwrite value, which may just be 0
         // Any of the segments we flush may increase this if they have a higher persisted version
         // The overwrite is required to ensure we acknowledge no-op operations in WAL that didn't hit any segment

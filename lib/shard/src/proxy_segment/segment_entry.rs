@@ -622,6 +622,10 @@ impl SegmentEntry for ProxySegment {
         false
     }
 
+    fn is_inner_appendable(&self) -> bool {
+        self.wrapped_segment.get().read().is_inner_appendable()
+    }
+
     fn flush(&self, sync: bool, force: bool) -> OperationResult<SeqNumberType> {
         let wrapped_segment = self.wrapped_segment.get();
         let wrapped_segment_guard = wrapped_segment.read();

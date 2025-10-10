@@ -259,8 +259,17 @@ pub trait SegmentEntry: SnapshotEntry {
     /// Get segment configuration
     fn config(&self) -> &SegmentConfig;
 
-    /// Get current stats of the segment
+    /// Whether this segment is appendable
+    ///
+    /// Returns appendable state of outer most segment. If this is a proxy segment, this shadows
+    /// the appendable state of the wrapped segment.
     fn is_appendable(&self) -> bool;
+
+    /// Whether the inner most segment is appendable
+    ///
+    /// Returns appendable state of inner most segment. If this is a proxy segment, this returns
+    /// the appendable state of the inner most wrapped segment.
+    fn is_inner_appendable(&self) -> bool;
 
     /// Flushes current segment state into a persistent storage, if possible
     /// if sync == true, block current thread while flushing
