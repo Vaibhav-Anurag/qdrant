@@ -336,15 +336,17 @@ fn query_enum_from_grpc_raw_query(
                     DEFAULT_VECTOR_NAME.to_owned()
                 }
             };
-            let named_vector = NamedQuery::new_from_vector(vector, name);
+            let named_vector = NamedQuery::new(vector, name);
             QueryEnum::Nearest(named_vector)
         }
-        Variant::RecommendBestScore(recommend) => {
-            QueryEnum::RecommendBestScore(NamedQuery::new(RecoQuery::try_from(recommend)?, using))
-        }
-        Variant::RecommendSumScores(recommend) => {
-            QueryEnum::RecommendSumScores(NamedQuery::new(RecoQuery::try_from(recommend)?, using))
-        }
+        Variant::RecommendBestScore(recommend) => QueryEnum::RecommendBestScore(NamedQuery {
+            query: RecoQuery::try_from(recommend)?,
+            using,
+        }),
+        Variant::RecommendSumScores(recommend) => QueryEnum::RecommendSumScores(NamedQuery {
+            query: RecoQuery::try_from(recommend)?,
+            using,
+        }),
         Variant::Discover(discovery) => QueryEnum::Discover(NamedQuery {
             query: DiscoveryQuery::try_from(discovery)?,
             using,
